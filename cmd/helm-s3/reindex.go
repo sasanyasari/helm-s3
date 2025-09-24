@@ -85,36 +85,36 @@ func (act *reindexAction) run(ctx context.Context) error {
 
 	items, errs := storage.Traverse(ctx, repoEntry.URL())
 
-	builtIndex := make(chan helmutil.Index, 1)
-	go func() {
-		idx := helmutil.NewIndex()
-		for item := range items {
-			baseURL := repoEntry.URL()
-			if act.relative {
-				baseURL = ""
-			}
-
-			if act.verbose {
-				act.printer.Printf("[DEBUG] Adding %s to index.\n", item.Filename)
-			}
-
-			filename := escapeIfRelative(item.Filename, act.relative)
-
-			if err := idx.Add(item.Meta.Value(), filename, baseURL, item.Hash); err != nil {
-				act.printer.PrintErrf("[ERROR] failed to add chart to the index: %s", err)
-			}
+	//builtIndex := make(chan helmutil.Index, 1)
+	//go func() {
+	idx := helmutil.NewIndex()
+	for item := range items {
+		baseURL := repoEntry.URL()
+		if act.relative {
+			baseURL = ""
 		}
-		idx.SortEntries()
-		idx.UpdateGeneratedTime()
 
-		builtIndex <- idx
-	}()
+		if act.verbose {
+			act.printer.Printf("[DEBUG] Adding %s to index.\n", item.Filename)
+		}
+
+		filename := escapeIfRelative(item.Filename, act.relative)
+
+		if err := idx.Add(item.Meta.Value(), filename, baseURL, item.Hash); err != nil {
+			act.printer.PrintErrf("[ERROR] failed to add chart to the index: %s", err)
+		}
+	}
+	idx.SortEntries()
+	idx.UpdateGeneratedTime()
+
+	//builtIndex <- idx
+	//}()
 
 	for err = range errs {
 		return fmt.Errorf("traverse the chart repository: %v", err)
 	}
 
-	idx := <-builtIndex
+	//idx := <-builtIndex
 
 	r, err := idx.Reader()
 	if err != nil {
