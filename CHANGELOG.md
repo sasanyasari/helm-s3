@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.17.6] - 2026-09-08
+
 ### Added
 
 - Add `HELM_S3_DYNAMIC_REGION_ENABLED` environment variable to disable dynamic
