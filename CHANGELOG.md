@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.17.6] - 2026-09-08
 
+### Security
+
+- Bump Go toolchain from 1.25.3 to 1.25.7 to fix
+  [CVE-2025-68121](https://avd.aquasec.com/nvd/cve-2025-68121) (crypto/tls
+  incorrect certificate validation during TLS session resumption).
+- `golang.org/x/crypto` is already at v0.55.0 in go.sum, fixing
+  [CVE-2026-56854](https://avd.aquasec.com/nvd/cve-2026-56854)
+  (golang.org/x/crypto/ssh authentication bypass).
+
 ### Added
 
 - Add `HELM_S3_DYNAMIC_REGION_ENABLED` environment variable to disable dynamic
